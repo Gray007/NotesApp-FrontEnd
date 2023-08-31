@@ -4,6 +4,7 @@ import noteService from "../services/notes";
 const NoteForm = ({
   notes,
   setNotes,
+  noteFormRef
   // setErrorMessage
 }) => {
   const [newNote, setNewNote] = useState("");
@@ -12,9 +13,10 @@ const NoteForm = ({
     event.preventDefault();
     const noteObject = {
       content: newNote,
-      important: Math.random() > 0.5,
+      important: true,
     };
 
+    noteFormRef.current.toggleVisibility()
     const saveNote = await noteService.create(noteObject);
     setNotes(notes.concat(saveNote));
     setNewNote("");

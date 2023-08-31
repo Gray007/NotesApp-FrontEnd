@@ -1,17 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Note from "./components/Note";
 import Notification from "./components/Notification";
 import Footer from "./components/Footer";
 import LoginForm from "./components/LoginForm";
 import NoteForm from "./components/noteForm";
+import Togglable from "./components/Togglable";
 import noteService from "./services/notes";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
   const [showAll, setShowAll] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
-
   const [user, setUser] = useState(null);
+
+  const noteFormRef = useRef();
 
   useEffect(() => {
     noteService.getAll().then((initialNotes) => {
@@ -47,6 +49,11 @@ const App = () => {
       });
   };
 
+  const handleLogout = () => {
+    window.localStorage.removeItem("loggedNoteappUser");
+    setUser(null);
+  };
+
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
 
   return (
@@ -56,15 +63,21 @@ const App = () => {
       <Notification message={errorMessage} />
 
       {!user ? (
-        <LoginForm setUser={setUser} setErrorMessage={setErrorMessage} />
+        <Togglable buttonLabel="log in here">
+          <LoginForm setUser={setUser} setErrorMessage={setErrorMessage} />
+        </Togglable>
       ) : (
         <div>
           <p>{user.name} logged in</p>
-          <NoteForm
-            notes={notes}
-            setNotes={setNotes}
-            // setErrorMessage={setErrorMessage}
-          />
+          <Togglable buttonLabel="new note" ref={noteFormRef}>
+            <NoteForm
+              notes={notes}
+              setNotes={setNotes}
+              noteFormRef={noteFormRef}
+              // setErrorMessage={setErrorMessage}
+            />
+          </Togglable>
+          <button onClick={() => handleLogout()}>logout</button>
         </div>
       )}
 

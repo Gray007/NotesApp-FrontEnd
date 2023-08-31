@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useState } from "react";
 import loginService from "../services/login";
 import noteService from "../services/notes";
 
-const LoginForm = ({setUser, setErrorMessage}) => {
+const LoginForm = ({ setUser, setErrorMessage }) => {
+  const [displayLogin, setDisplayLogin] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
- 
+
   const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -14,10 +15,8 @@ const LoginForm = ({setUser, setErrorMessage}) => {
         username,
         password,
       });
-      window.localStorage.setItem(
-        'loggedNoteappUser', JSON.stringify(user)
-      ) 
-      noteService.setToken(user.token)
+      window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user));
+      noteService.setToken(user.token);
       setUser(user);
       setUsername("");
       setPassword("");
@@ -30,27 +29,36 @@ const LoginForm = ({setUser, setErrorMessage}) => {
   };
 
   return (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
+    // <>
+    //   {displayLogin ? (
+        <>
+          <form onSubmit={handleLogin}>
+            <div>
+              username
+              <input
+                type="text"
+                value={username}
+                name="Username"
+                onChange={({ target }) => setUsername(target.value)}
+              />
+            </div>
+            <div>
+              password
+              <input
+                type="password"
+                value={password}
+                name="Password"
+                onChange={({ target }) => setPassword(target.value)}
+              />
+            </div>
+            <button type="submit">login</button>
+          </form>
+          {/* <button onClick={() => setDisplayLogin(false)}>Cancel</button> */}
+        </>
+      // ) : (
+      //   <button onClick={() => setDisplayLogin(true)}>log in here</button>
+      // )}
+    // </>
   );
 };
 
