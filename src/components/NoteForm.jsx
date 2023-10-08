@@ -1,5 +1,5 @@
-import { useState } from "react";
-import noteService from "../services/notes";
+import { useState } from 'react'
+import noteService from '../services/notes'
 
 const NoteForm = ({
   notes,
@@ -7,31 +7,31 @@ const NoteForm = ({
   noteFormRef
   // setErrorMessage
 }) => {
-  const [newNote, setNewNote] = useState("");
+  const [newNote, setNewNote] = useState('')
 
   const addNote = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     const noteObject = {
       content: newNote,
       important: true,
-    };
+    }
 
     noteFormRef.current.toggleVisibility()
-    const saveNote = await noteService.create(noteObject);
-    setNotes(notes.concat(saveNote));
-    setNewNote("");
-  };
+    const saveNote = await noteService.create(noteObject)
+    setNotes(notes.concat(saveNote))
+    setNewNote('')
+  }
 
   const handleNoteChange = (event) => {
-    setNewNote(event.target.value);
-  };
+    setNewNote(event.target.value)
+  }
 
   return (
     <form onSubmit={addNote}>
       <input value={newNote} onChange={handleNoteChange} />
       <button type="submit">save</button>
     </form>
-  );
-};
+  )
+}
 
-export default NoteForm;
+export default NoteForm
